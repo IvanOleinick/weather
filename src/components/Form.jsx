@@ -1,16 +1,20 @@
-const Form = ({getWeather}) => {
-    const getCity = e => {
+import { useDispatch } from "react-redux";
+import { fetchWeather } from "../action/thunkAction.js";
+
+const Form = () => {
+    const dispatch = useDispatch();
+
+    const getCity = (e) => {
+        e.preventDefault();
         const city = e.currentTarget.city.value.trim();
-        console.log(city)
-        e.preventDefault()
-        getWeather(city)
+        if (!city) return;
+        dispatch(fetchWeather(city));
+    };
 
-
-    }
     return (
         <form onSubmit={getCity}>
-            <input name={'city'} type="text" placeholder='City name'/>
-            <button type={'submit'}>Get Weather</button>
+            <input name="city" type="text" placeholder="City name" />
+            <button type="submit">Get Weather</button>
         </form>
     );
 };
