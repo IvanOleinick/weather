@@ -1,5 +1,6 @@
-import { WEATHER, messageAction } from "./accountAction.js";
-import { api_key, base_url } from "../utils/constants.js";
+import {messageAction, WEATHER} from "./accountAction.js";
+import {api_key, base_url} from "../utils/constants.js";
+
 
 export const newWeatherAction = (weather) => ({
     type: WEATHER,

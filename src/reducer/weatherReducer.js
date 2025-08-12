@@ -13,7 +13,7 @@ export const weatherReducer=(state = defaultState, action) => {
     switch (action.type) {
         case
         WEATHER: {
-            return {...state,weather:action.payload}
+            return {...state,...action.payload}
         }
         default:
             return state;
