@@ -1,21 +1,17 @@
-import {messageAction, WEATHER} from "./accountAction.js";
-import {api_key, base_url} from "../utils/constants.js";
+import {api_key, base_url} from "../../utils/constants.js";
+import {setMessage} from "../message/messageSlice.js";
+import {setWeather} from "../weather/weatherSlice.js";
 
-
-export const newWeatherAction = (weather) => ({
-    type: WEATHER,
-    payload: weather,
-});
 
 export const fetchWeather = (city) => {
     return (dispatch) => {
-        dispatch(messageAction("Pending"));
+        dispatch(setMessage("Pending"));
 
         fetch(`${base_url}?q=${city}&appid=${api_key}&units=metric`)
             .then((res) => res.json())
             .then((data) => {
                 dispatch(
-                    newWeatherAction({
+                    setWeather({
                         country: data.sys.country,
                         city: data.name,
                         temp: data.main.temp,
@@ -23,8 +19,8 @@ export const fetchWeather = (city) => {
                         sunset: new Date(data.sys.sunset * 1000).toLocaleString(),
                     })
                 );
-                dispatch(messageAction(""));
+                dispatch(setMessage(""));
             })
-            .catch(() => dispatch(messageAction("Failed to fetch weather")));
+            .catch(() => dispatch(setMessage("Enter correct city name")));
     };
 };
