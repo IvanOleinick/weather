@@ -1,6 +1,6 @@
-import { fetchWeather } from "../features/api/weatherAction.ts";
 import type {FormEvent} from "react";
 import {useAppDispatch} from "../app/hooks.ts";
+import {setCity} from "../features/city/citySlice.ts";
 
 const Form = () => {
     const dispatch = useAppDispatch();
@@ -9,7 +9,7 @@ const Form = () => {
         e.preventDefault();
         const city = e.currentTarget.city.value.trim();
         if (!city) return;
-        dispatch(fetchWeather(city));
+        dispatch(setCity(city));
     };
 
     return (

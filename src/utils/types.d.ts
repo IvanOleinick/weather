@@ -7,3 +7,16 @@ export interface WeatherInfo {
 
 
 }
+
+export type WeatherInfoResponse = {
+    name: string,
+    main: {
+        temp: number,
+        pressure: number,
+    },
+    sys: {
+        sunset: number,
+        country: string,
+    },
+
+}
