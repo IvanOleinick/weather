@@ -9,7 +9,7 @@ const Form = () => {
         e.preventDefault();
         const city = e.currentTarget.city.value.trim();
         if (!city) return;
-        dispatch(setCity(city));
+        dispatch(setCity(city.toLowerCase()));
     };
 
     return (

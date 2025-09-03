@@ -1,50 +1,26 @@
-import type {WeatherInfoResponse} from "../../utils/types";
-import { base_url, api_key } from "../../utils/constants.ts";
 import {createApi} from "@reduxjs/toolkit/query/react";
 import {fetchBaseQuery} from "@reduxjs/toolkit/query";
-
+import {api_key, base_url} from "../../utils/constants.ts";
+import type {WeatherInfo, WeatherInfoResponse} from "../../utils/types";
 
 export const weatherApi = createApi({
-    reducerPath: "weatherApi",
-    baseQuery: fetchBaseQuery({ baseUrl: base_url }),
+    reducerPath: 'weatherApi',
+    baseQuery: fetchBaseQuery({baseUrl: base_url}),
+    refetchOnFocus:true,
+    // refetchOnMountOrArgChange:true,
     endpoints: builder => ({
-       getWeatherByCity:builder.query<WeatherInfoResponse,string>({
-           query: (city: string) => ({
-               url: `?q=${city}&appid=${api_key}&units=metric`,
-           }),
-       })
+        getWeatherByCity: builder.query<WeatherInfo, string>({
+            query: city => `?q=${city}&appid=${api_key}&units=metric`,
+            keepUnusedDataFor:10,
+            transformResponse: (data: WeatherInfoResponse) : WeatherInfo => ({
+                country: data.sys.country,
+                city: data.name,
+                temp:data.main.temp,
+                pressure: data.main.pressure,
+                sunset: new Date(data.sys.sunset * 1000).toLocaleDateString()
+            })
+        })
     }),
-})
+});
 
-export const { useGetWeatherByCityQuery } = weatherApi;
-
-
-// export const fetchWeather = createAsyncThunk<WeatherInfo, string>(
-//     "weather/fetchByCity",
-//     async (city: string) => {
-//         if (!city?.trim()) {
-//             throw new Error("City is required");
-//         }
-//
-//         const response = await fetch(
-//             `${base_url}?q=${city}&appid=${api_key}&units=metric`
-//         );
-//
-//         if (response.status === 404) {
-//             throw new Error("Enter correct city name");
-//         }
-//         if (!response.ok) {
-//             throw new Error("Something went wrong");
-//         }
-//
-//         const data = await response.json();
-//
-//         return {
-//             country: data.sys.country,
-//             city: data.name,
-//             temp: data.main.temp,
-//             pressure: data.main.pressure,
-//             sunset: new Date(data.sys.sunset * 1000).toLocaleString(),
-//         };
-//     }
-// );
+export const {useGetWeatherByCityQuery} = weatherApi;
